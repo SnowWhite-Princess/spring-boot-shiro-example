@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean register(User user) {
         int count = 0;
-        if (check(user.getUsername())){
+        if (check(user.getUsername()) == false){
                 /*
                 String algorithmName, 加密算法
                 Object source, 加密的密码
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
             //保存加密密码：注意ShiroConfig设置的加密方式，没有配就用toString
             user.setPassword(simpleHash.toHex());
              count = userMapper.insert(user);
-        }else {
+        }else{
             throw  new  RuntimeException("账号已经存在");
         }
         return count !=0;
@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean check(String username) {
-        User userByName = userMapper.findUserByName(username);
-        if (userByName == null){
+        User user = userMapper.findUserByName(username);
+        if (user == null){
             return false;
         }
         return  true;

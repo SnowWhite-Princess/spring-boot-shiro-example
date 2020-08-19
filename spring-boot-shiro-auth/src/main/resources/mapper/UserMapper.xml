@@ -28,9 +28,9 @@
     <insert id="insert" keyColumn="uid" keyProperty="uid" parameterType="com.smart.example.entity.User"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into sys_user (username, `password`, `status`
+        insert into sys_user (username, `password`
         )
-        values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+        values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
         )
     </insert>
     <insert id="insertSelective" keyColumn="uid" keyProperty="uid" parameterType="com.smart.example.entity.User"
