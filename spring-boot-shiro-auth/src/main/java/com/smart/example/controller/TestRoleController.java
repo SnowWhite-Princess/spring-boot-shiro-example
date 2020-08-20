@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestRoleController {
     @GetMapping("/")
     public String index(){
-        return "不需要热和权限";
+        return "不需要任何权限";
     }
 
     @GetMapping("/role/admin")

@@ -1,11 +1,9 @@
 shiro:
   loginUrl: /login
   unauthorizedUrl: /unauth
-
-
 spring:
   redis:
-    host: 119.23.190.71
+    host: 127.0.0.1
     port: 6379
     timeout: 2000
     database: 0

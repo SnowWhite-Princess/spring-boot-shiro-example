@@ -1,7 +1,10 @@
 package com.smart.example.controller;
 
+import com.smart.example.common.ResponseResult;
 import com.smart.example.entity.User;
 import com.smart.example.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -11,6 +14,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.xml.ws.Response;
+import java.io.Serializable;
 
 /**
  * 控制层---->  自定义Realm ---->配置信息
@@ -28,12 +33,13 @@ import javax.annotation.Resource;
  * 注解
  */
 @RestController
+@Slf4j
 public class LoginController {
     @Resource
     UserService userService;
 
     @PostMapping("/login")
-    public String login(String username, String password) {
+    public ResponseResult<Serializable> login(String username, String password) {
         // access_token
         try {
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
@@ -48,7 +54,8 @@ public class LoginController {
         } catch (Exception e) {
             throw new RuntimeException("登录失败!!!请稍后再试");
         }
-        return "success";
+        Serializable id = SecurityUtils.getSubject().getSession().getId();
+        return ResponseResult.success(id);
     }
 
     @PostMapping("/register")
@@ -65,4 +72,15 @@ public class LoginController {
         boolean isExist = userService.check(username);
         return isExist;
     }
+
+    public ResponseResult<Boolean> logout(){
+        try {
+            SecurityUtils.getSubject().logout();
+            return ResponseResult.success(true);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+        return ResponseResult.success(false);
+    }
+
 }

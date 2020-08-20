@@ -4,26 +4,27 @@ import com.smart.example.config.ShiroConfig;
 import com.smart.example.entity.User;
 import com.smart.example.mapper.UserMapper;
 import com.smart.example.service.UserService;
+import com.smart.example.utils.ShiroUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Resource
     UserMapper userMapper;
 
     /**
-     *
      * @param user
-     * @return  true 注册成功
+     * @return true 注册成功
      */
 
     @Override
     public boolean register(User user) {
         int count = 0;
-        if (check(user.getUsername()) == false){
+        if (check(user.getUsername()) == false) {
                 /*
                 String algorithmName, 加密算法
                 Object source, 加密的密码
@@ -36,20 +37,29 @@ public class UserServiceImpl implements UserService {
                     ShiroConfig.HASH_ITERATIONS);
             //保存加密密码：注意ShiroConfig设置的加密方式，没有配就用toString
             user.setPassword(simpleHash.toHex());
-             count = userMapper.insert(user);
-        }else{
-            throw  new  RuntimeException("账号已经存在");
+            count = userMapper.insert(user);
+        } else {
+            throw new RuntimeException("账号已经存在");
         }
-        return count !=0;
+        return count != 0;
     }
 
     @Override
     public boolean check(String username) {
         User user = userMapper.findUserByName(username);
-        if (user == null){
+        if (user == null) {
             return false;
         }
-        return  true;
+        return true;
+    }
+
+    @Override
+    public boolean pwd(String password) {
+        User user = new User();
+        user.setUid(ShiroUtils.getUserId());
+        user.setPassword(ShiroUtils.sha256(password, null));
+        int count = userMapper.updateByPrimaryKey(user);
+        return count > 0;
     }
 
 

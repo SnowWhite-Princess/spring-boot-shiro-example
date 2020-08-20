@@ -1,19 +1,13 @@
-package com.smart.example.entity;
+package com.smart.example.dto;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 用户表
- */
 @Data
-public class User implements Serializable {
+public class UserDto implements Serializable {
     private Integer uid;
-
     private String username;
-
-    private String password;
-
     private Integer status;
 }
+
